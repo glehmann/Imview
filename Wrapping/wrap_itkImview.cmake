@@ -1,0 +1,3 @@
+WRAP_CLASS("itk::Imview")
+    WRAP_IMAGE_FILTER_INT(1)
+END_WRAP_CLASS()

@@ -1,5 +1,5 @@
 #Change PROJECT_NAME to the name of your project
-PROJECT()
+PROJECT(Imview)
 
 # set the name of the input image used to run the test
 SET(INPUT_IMAGE ${CMAKE_SOURCE_DIR}/images/cthead1.png)
@@ -26,12 +26,22 @@ FOREACH(Package ${Required_Packages})
   LOADPACKAGE(${Package})
 ENDFOREACH(Package)
 
+
+ADD_DEFINITIONS(-DHAVE_SYSV_IPC)
+
+SET(IMCLIENT_SRCS
+	liarwrap.c
+	imclient.c
+)
+
+ADD_LIBRARY(IMVIEW ${IMCLIENT_SRCS})
+
 #Set any libraries that your project depends on.
 #examples: ITKCommon, VTKRendering, etc
 SET(Libraries
   ITKCommon
-  ITKBasicFilters
-  ITKIO
+  IMVIEW
+  rt
 )
 
 
@@ -62,9 +72,9 @@ ENDIF(BUILD_WRAPPERS)
 
 IF(BUILD_TESTING)
 
-SET(CurrentExe "check")
-ADD_EXECUTABLE(${CurrentExe} ${CurrentExe}.cxx)
-TARGET_LINK_LIBRARIES(${CurrentExe} ${Libraries})
+#SET(CurrentExe "check")
+#ADD_EXECUTABLE(${CurrentExe} ${CurrentExe}.cxx)
+#TARGET_LINK_LIBRARIES(${CurrentExe} ${Libraries})
 
 ENDIF(BUILD_TESTING)
 
