@@ -41,8 +41,8 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
 
 % At minimum, give your name and an email address.  You can include a
 % snail-mail address if you like.
-\author{}
-\authoraddress{}
+\author{Richard Beare}
+\authoraddress{Richard.Beare@ieee.org}
 
 \begin{document}
 \maketitle
@@ -56,43 +56,44 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
 \noindent
 % The abstract should be a paragraph or two long, and describe the
 % scope of the document.
+{\tt Imview}\cite{imview} is a handy image viewer with functionality oriented
+towards image analysis tasks. It can display a wide variety of image
+and pixel types, including 3D image, and includes functions for
+measurement, overlay display and limited interaction via pointfile. It
+also has an image server capability so that image data can be
+transmitted via a shared memory or socket interface so that images can
+be displayed without worrying about file type restrictions.
+
+This article describes the beginning of an interface between {\bf
+WrapITK} and imview.
 \end{abstract}
 
 \tableofcontents
 
+\section{Installation}
+This package can be built as an external project for WrapITK
+\cite{WrapITK}. WrapITK must be installed first, then follow 
+the instructions for installing an external project.
 
-% \url{http://www.itk.org}
-% \code{Insight/Documentation/Style.pdf}
-% \section{Principles of Solar Spot Detection}
-% \cite{ITKSoftwareGuide}.
-% \doxygen{ImageToImageFilter}
+\section{Examples of usage}
+Declare some image types:
+\begin{verbatim}
+t1=itk.Image[itk.UC, 2]
+t2=itk.Image[itk.US, 2]
+t3=itk.Image[itk.UC, 3]
+\end{verbatim}
 
-% \small \begin{verbatim}
-% \end{verbatim} \normalsize
-
-
-% The {itemize} environment uses a bullet for each \item.  If you want the 
-% \item's numbered, use the {enumerate} environment instead.
-% \begin{itemize}
-%   \item  Insight Toolkit 2.4.
-%   \item  CMake 2.2
-% \end{itemize}
-
-% \ref{cthead1}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics{cthead1}
-\caption{The input image.\label{cthead1}}
-\end{figure}
-
+Load some images
+\begin{verbatim}
+reader1=itk.ImageFileReader[t1].New(FileName='cthead1.png')
+\end{verbatim}
 
 \appendix
 
 
 
 \bibliographystyle{plain}
-\bibliography{InsightJournal}
+\bibliography{Article,InsightJournal}
 \nocite{ITKSoftwareGuide}
 
 \end{document}

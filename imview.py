@@ -37,6 +37,9 @@ class Imview :
             self.connected = True
             print "Connected"
             print self.Connection
+        else:
+            if itk.template(itkIm) != itk.template(self.imviewObj)[1]:
+                self.imviewObj = itk.Imview[itkIm]
         # transmit the image
         status = self.imviewObj.ImviewPutImage(itkIm, self.Connection, title)
         if (status != 0):
@@ -51,6 +54,8 @@ class Imview :
         if not self.connected :
             print "No image being viewed - send one first"
         else:
+            if itk.template(itkIm) != itk.template(self.imviewObj)[1]:
+                self.imviewObj = itk.Imview[itkIm]
             status = self.imviewObj.ImviewPutOverlay(itkIm, self.Connection, title)
     #
     def GetPointfile(self):

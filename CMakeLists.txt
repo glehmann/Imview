@@ -27,21 +27,21 @@ FOREACH(Package ${Required_Packages})
 ENDFOREACH(Package)
 
 
-ADD_DEFINITIONS(-DHAVE_SYSV_IPC)
+#ADD_DEFINITIONS(-DHAVE_SYSV_IPC)
+#
+#SET(IMCLIENT_SRCS
+#	liarwrap.c
+#	imclient.c
+#)
 
-SET(IMCLIENT_SRCS
-	liarwrap.c
-	imclient.c
-)
-
-ADD_LIBRARY(IMVIEW ${IMCLIENT_SRCS})
-
+#ADD_LIBRARY(IMVIEWCLIENT ${IMCLIENT_SRCS})
+#LINK_DIRECTORIES(${PROJECT_BUILD_DIR})
 #Set any libraries that your project depends on.
 #examples: ITKCommon, VTKRendering, etc
 SET(Libraries
   ITKCommon
-  IMVIEW
-  rt
+#  IMVIEWCLIENT
+#  rt
 )
 
 
@@ -56,8 +56,9 @@ ENDIF(INSTALL_DEVEL_FILES)
 
 
 
-# option for wrapping
-OPTION(BUILD_WRAPPERS "Wrap library" OFF)
+# option for wrapping 
+# No point doing anything else with this package
+OPTION(BUILD_WRAPPERS "Wrap library" ON)
 IF(BUILD_WRAPPERS)
    SUBDIRS(Wrapping)
 ENDIF(BUILD_WRAPPERS)
