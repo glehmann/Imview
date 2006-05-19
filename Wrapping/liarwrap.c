@@ -160,7 +160,7 @@ int imexception(const char *msg, ...)
 
     va_end(args);
 
-    exit(1);
+    /*    exit(1);*/
 }
 
 /* 

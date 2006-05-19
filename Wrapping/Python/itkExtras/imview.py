@@ -1,12 +1,13 @@
 class imview :
     """An interface for using imview from python/itk"""
-    def __init__(self, input=None) :
+    import Imview
+    def __init__(self, input=None, title="noname") :
         """ Create the imview process and transmit an image to it if desired"""
         # start imview, retrieving port number
         self.__StartImview__()
         self.connected = False
         if not input is None:
-            self.Show(input)
+            self.Show(input, title)
     #
     def __StartImview__(self):
         """ for internal use only"""
@@ -30,6 +31,7 @@ class imview :
         Flip between them with the menu or space bar
         """
         import itk
+        itkIm = itk.image(itkIm)
         if not self.connected :
             # do the login now that we have an image type
             self.imviewObj = itk.Imview[itkIm]
@@ -37,6 +39,11 @@ class imview :
             self.connected = True
             print "Connected"
             print self.Connection
+            self.ImageTemp = itk.template(itkIm)[1]
+        else:
+            if itk.template(itkIm)[1] != self.ImageTemp:
+                self.ImageTemp = itk.template(itkIm)[1] 
+                self.imviewObj = itk.Imview[itkIm]
         # transmit the image
         status = self.imviewObj.ImviewPutImage(itkIm, self.Connection, title)
         if (status != 0):
@@ -48,9 +55,14 @@ class imview :
     #
     def Overlay(self, itkIm, title="noname") :
         """Send an overlay to image with specified title"""
+        import itk
+        itkIm = itk.image(itkIm)
         if not self.connected :
             print "No image being viewed - send one first"
         else:
+            if itk.template(itkIm)[1] != self.ImageTemp:
+                self.ImageTemp = itk.template(itkIm)[1] 
+                self.imviewObj = itk.Imview[itkIm]
             status = self.imviewObj.ImviewPutOverlay(itkIm, self.Connection, title)
     #
     def GetPointfile(self):
@@ -61,7 +73,58 @@ class imview :
         else:
             response = self.imviewObj.ImviewSendCommand("pf\r\n", self.Connection)
             # convert pointfile to sensible structure
+            response = self.parsePointfile(response)
             return response
+    #
+    def parsePointfile(self, pfstring):
+        import re
+        eol=re.compile("\n")
+        white=re.compile(r'\s+')
+        lines = eol.split(pfstring)
+        # if there is no comment line at the beginning, then it is an old
+        # style pointfile for a grayscale image
+        if (lines[0][0] == '#'):
+            # advance pointfile
+            result=[]
+            # second line contains the column names
+            thisGroup=[]
+            groups = 0
+            colnames=white.split(lines[2])[1:9]
+            for i in range(3, len(lines)):
+                if (len(lines[i]) > 0):
+                    if (lines[i].find('break') >= 0):
+                        result.append(thisGroup)
+                        thisGroup=[]
+                        groups = groups + 1
+                    else:
+                        sp = white.split(lines[i].strip())
+                        ThisLine={}
+                        for j in range(len(colnames)):
+                            ThisLine[colnames[j]] = float(sp[j])
+                        thisGroup.append(ThisLine)
+            if (groups==0):
+                result.append(thisGroup)
+        else:
+            # simple point file - 2d, grayscale
+            # produce a list of dictionaries
+            result=[]
+            thisGroup=[]
+            groups = 0
+            for i in range(len(lines)):
+                if (len(lines[i]) > 0):
+                    if (lines[i] == 'break'):
+                        result.append(thisGroup)
+                        thisGroup=[]
+                        groups = groups + 1
+                    else:
+                        sp = white.split(lines[i])
+                        x = int(sp[0])
+                        y = int(sp[1])
+                        g = float(sp[2])
+                        thisGroup.append({"X" : x, "Y" : y, "G" : g})
+            if (groups==0):
+                result.append(thisGroup)
+        return result
     #
     def Kill(self):
         """Kill the imview process"""
@@ -76,14 +139,14 @@ class imview :
             print "No image being viewed - send one first"
         else:
             cmd = "cmap " + mapname + "\r\n"
-            resp = self.imviewObj.ImviewSendCommand(cmd, self.Connection)
-            return resp
+            self.imviewObj.ImviewSendCommand(cmd, self.Connection)
     #
-    def Close(self, title="<overlay>"):
+    def CloseOverlay(self):
         """Close an image defined by title - the default action closes the overlay"""
         if not self.connected :
             print "No image being viewed - send one first"
         else:
+            title="<overlay>"
             cmd = "close " + title + "\r\n"
             resp = self.imviewObj.ImviewSendCommand(cmd, self.Connection)
     #
