@@ -78,6 +78,8 @@ class imview :
     #
     def parsePointfile(self, pfstring):
         import re
+        if (pfstring == 'Empty\n'):
+            return []
         eol=re.compile("\n")
         white=re.compile(r'\s+')
         lines = eol.split(pfstring)

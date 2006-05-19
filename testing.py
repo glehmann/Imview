@@ -43,6 +43,7 @@ v2 = itk.imview(reader3, title="ESCells raw")
 v2.Show(f1, title="3d float")
 
 # send the overlay - these will be placed over the currently visible image
+# label images can be used too
 v1.Overlay(thresh1)
 v2.Overlay(thresh2)
 
@@ -58,5 +59,5 @@ v1a.Link([v1])
 #close the overlay
 v1.CloseOverlay()
 
-
-# retrieve pointfiles
+# retrieve pointfiles -- mark points on v1
+pts = v1.GetPointfile

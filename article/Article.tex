@@ -76,17 +76,98 @@ This package can be built as an external project for WrapITK
 the instructions for installing an external project.
 
 \section{Examples of usage}
+This set of commands is also available the file {\tt testing.py} in the root of the repository
+
+Import the necessary modules:
+\begin{verbatim}
+import itk
+import Imview
+\end{verbatim}
+
+
 Declare some image types:
 \begin{verbatim}
 t1=itk.Image[itk.UC, 2]
 t2=itk.Image[itk.US, 2]
 t3=itk.Image[itk.UC, 3]
+t4=itk.Image[itk.F, 3]
 \end{verbatim}
 
 Load some images
 \begin{verbatim}
-reader1=itk.ImageFileReader[t1].New(FileName='cthead1.png')
+reader1=itk.ImageFileReader[t1].New(FileName='images/cthead1.png')
+reader2=itk.ImageFileReader[t2].New(FileName='images/cthead1.png')
+reader3=itk.ImageFileReader[t3].New(FileName='images/ESCells.img')
+reader4=itk.ImageFileReader[t4].New(FileName='images/ESCells.img')
 \end{verbatim}
+
+Perform some arithmetic operations so the dynamic range changes.
+\begin{verbatim}
+m1 = itk.MultiplyImageFilter[t2, t2, t2].New(reader2, reader2)
+f1 = itk.CosImageFilter[t4,t4].New(reader4)
+\end{verbatim}
+
+Perform thresholding - results will be used as overlay masks.
+\begin{verbatim}
+# a 2d threshold image
+thresh1 = itk.OtsuThresholdImageFilter[t1, t1].New(reader1)
+thresh1.SetInsideValue(1)
+thresh1.SetOutsideValue(0)
+
+# a 3d threshold image
+thresh2 = itk.OtsuThresholdImageFilter[t3, t3].New(reader3)
+thresh2.SetInsideValue(1)
+thresh2.SetOutsideValue(0)
+\end{verbatim}
+
+Create an imview instance and display some images. Pressing the space
+bar will toggle between the images.
+\begin{verbatim}
+v1=itk.imview()
+v1.Show(reader1, title="char image")
+v1.Show(m1, title="short image")
+\end{verbatim}
+
+Display 3D images. Space bar will toggle between the two and {\tt
+insert} and {\tt delete} will move between planes.
+\begin{verbatim}
+v2 = itk.imview(reader3, title="ESCells raw")
+v2.Show(f1, title="3d float")
+\end{verbatim}
+
+Display overlays on the image. Overlays will appear on the currently
+visible image. Dimensions must match.
+\begin{verbatim}
+v1.Overlay(thresh1)
+v2.Overlay(thresh2)
+\end{verbatim}
+
+Create another instance.
+\begin{verbatim}
+v1a=itk.imview(reader1)
+\end{verbatim}
+
+Change the colourmap. Options can also be selected from imview menus.
+\begin{verbatim}
+v1a.ColorMap("inv_spiral.lut")
+\end{verbatim}
+
+Link this instance with another. After linking zooming and panning
+operations will be synchronised. Check the imview docs about how to
+zoom with the mouse.
+\begin{verbatim}
+v1a.Link([v1])
+\end{verbatim}
+Close the overlay.
+\begin{verbatim}
+v1.CloseOverlay()
+\end{verbatim}
+
+Retrieve marked points - Shift - click combinations mark points.
+\begin{verbatim}
+pts = v1.GetPointfile
+\end{verbatim}
+
 
 \appendix
 
