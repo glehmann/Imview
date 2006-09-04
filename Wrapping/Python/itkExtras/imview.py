@@ -1,6 +1,5 @@
 class imview :
     """An interface for using imview from python/itk"""
-    import Imview
     def __init__(self, input=None, title="noname") :
         """ Create the imview process and transmit an image to it if desired"""
         # start imview, retrieving port number
