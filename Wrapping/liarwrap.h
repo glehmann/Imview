@@ -107,6 +107,8 @@ extern int   pixsize_[];
 
   void LIAREnableDebug(void);
 
+  int imexception(const char *msg, ...);
+
 /* prototypes */
 /*
 IMAGE *imloadtiff(const char *path);

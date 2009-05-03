@@ -30,7 +30,8 @@ class imview :
         Flip between them with the menu or space bar
         """
         import itk
-        itkIm = itk.image(itkIm)
+        #itkIm = itk.image(itkIm)
+        itkIm = itk.output(itkIm)
         if not self.connected :
             # do the login now that we have an image type
             self.imviewObj = itk.Imview[itkIm]
@@ -55,7 +56,8 @@ class imview :
     def Overlay(self, itkIm, title="noname") :
         """Send an overlay to image with specified title"""
         import itk
-        itkIm = itk.image(itkIm)
+        #itkIm = itk.image(itkIm)
+        itkIm = itk.output(itkIm)
         if not self.connected :
             print "No image being viewed - send one first"
         else:

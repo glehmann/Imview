@@ -144,7 +144,7 @@ int LIARerror(const char *msg, ...)
     ret = vfprintf(stderr, strarg, args);
 
     va_end(args);
-    
+    return(ret);
 }
 
 int imexception(const char *msg, ...)
@@ -159,7 +159,7 @@ int imexception(const char *msg, ...)
     ret = vfprintf(stderr, strarg, args);
 
     va_end(args);
-
+    return(ret);
     /*    exit(1);*/
 }
 
