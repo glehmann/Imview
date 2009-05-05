@@ -106,7 +106,12 @@ Imview<TImage>
     hIMAGE.nz = 1;
   hIMAGE.nt = 1;
   hIMAGE.it = IM_SINGLE;  // nothing fancy at the moment
-  hIMAGE.nc = 1;          // these will need to change for colour images
+  hIMAGE.nc = 1;          // these will need to change for colour
+			  // images
+#if 0
+  hImage.it = IM_RGB;
+  hImage.nc = 3;
+#endif
   hIMAGE.pt = GetPixType();
   //std::cout << size << " " << start << std::endl;
   typedef  void * vpoint;

@@ -121,8 +121,8 @@ class imview :
                         groups = groups + 1
                     else:
                         sp = white.split(lines[i])
-                        x = int(sp[0])
-                        y = int(sp[1])
+                        y = int(sp[0])
+                        x = int(sp[1])
                         g = float(sp[2])
                         thisGroup.append({"X" : x, "Y" : y, "G" : g})
             if (groups==0):
