@@ -12,6 +12,14 @@ ENABLE_TESTING()
 INCLUDE(Dart)
 FIND_PROGRAM(IMAGE_COMPARE ImageCompare)
 
+INCLUDE (CheckIncludeFiles)
+CHECK_INCLUDE_FILES("sys/sem.h" HAVE_SEM_H)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Wrapping/imviewconfig.h.in ${CMAKE_CURRENT_BINARY_DIR}/Wrapping/imviewconfig.h)
+
+INCLUDE_DIRECTORIES(
+${CMAKE_CURRENT_BINARY_DIR}/Wrapping/
+)
+
 #Declare any external dependencies that your project may have here.
 #examples include: ITK, VTK, JPEG, PNG, OpenGL, ZLIB, Perl, Java
 #If you're not sure what name to use, look in the Modules directory of your
@@ -40,8 +48,6 @@ ENDFOREACH(Package)
 #examples: ITKCommon, VTKRendering, etc
 SET(Libraries
   ITKCommon
-#  IMVIEWCLIENT
-#  rt
 )
 
 

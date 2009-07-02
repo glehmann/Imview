@@ -15,6 +15,7 @@
 #include "liarp.h"
 #include "liarwrap.h"
 #include "imclient.h"
+#include "imviewconfig.h"
 
 #define ANSWER_MAX_SIZE 1024
 #define BIN_MAX_SIZE    8192
@@ -99,7 +100,8 @@ struct timezone
 #include <sys/sem.h>
 #include <sys/shm.h>
 
-#if defined(__GNU_LIBRARY__) && !defined(_SEM_SEMUN_UNDEFINED)
+/* #if (defined(__GNU_LIBRARY__) && !defined(_SEM_SEMUN_UNDEFINED)) */
+#if (defined(HAVE_SEM_H))
 /* union semun is defined by including <sys/sem.h> */
 #else
 /* according to X/OPEN we have to define it ourselves */
