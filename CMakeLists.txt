@@ -1,6 +1,6 @@
 #Change PROJECT_NAME to the name of your project
 PROJECT(Imview)
-
+cmake_minimum_required(VERSION 2.4)
 # set the name of the input image used to run the test
 SET(INPUT_IMAGE ${CMAKE_SOURCE_DIR}/images/cthead1.png)
 
@@ -14,7 +14,6 @@ FIND_PROGRAM(IMAGE_COMPARE ImageCompare)
 
 INCLUDE (CheckIncludeFiles)
 CHECK_INCLUDE_FILES("sys/sem.h" HAVE_SEM_H)
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Wrapping/imviewconfig.h.in ${CMAKE_CURRENT_BINARY_DIR}/Wrapping/imviewconfig.h)
 
 INCLUDE_DIRECTORIES(
 ${CMAKE_CURRENT_BINARY_DIR}/Wrapping/
