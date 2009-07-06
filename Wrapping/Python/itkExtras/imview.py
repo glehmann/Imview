@@ -15,7 +15,7 @@ class imview :
         imviewCommand = "imview -server -fork"
         imviewPipe = os.popen(imviewCommand)
         resp = imviewPipe.readline()
-        rePort = re.compile("Port:")
+        rePort = re.compile(".*[pP]ort:")
         self.portNum = int(rePort.sub("", resp))
     #   
     def Summary(self) :
